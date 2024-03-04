@@ -20,11 +20,25 @@ library(scales)
 owid_covid_data <- read_csv("owid-covid-data.csv")
 #Primero seleccionamos los paises que vamos a utilizar en la tabla, este será nuestro nuevo data frame con el que vamos a crear la gráfica
 paises_selecionados<-c("United States","Italy","France","Germany","Canada","Japan","United Kingdom","Spain")
+color_paises <-  c("United States" = "purple",
+                                  "Italy" = "lightblue",
+                                  "France" = "orange",
+                                  "Germany" = "green",
+                                  "Canada" = "brown",
+                                  "Japan" = "darkblue",
+                                  "United Kingdom" = "pink",
+                                  "Spain" = "red")
 paises<-owid_covid_data[owid_covid_data$location %in% paises_selecionados, ]
 paises$total_cases[is.na(paises$total_cases)]<-0
-g<- ggplot(paises,aes(x=date,y=total_cases))+geom_line(aes(colour=location))
+g<- ggplot(paises,aes(x=date,y=total_cases))+
+  geom_line(aes(colour=location, size = ifelse(location == "Spain",0.500001 ,0.5)))+
+  theme(panel.grid.major.y = element_line(color = "grey",size = 0.5,linetype = 2))
 g<- g + scale_x_date(breaks="%b %d,%Y", date_breaks="1 year")
 g<- g + scale_y_continuous(breaks=seq(0,18,by=2)) 
+g <- g + scale_colour_manual(values = color_paises)
+g <- g + theme(legend.position = "none")
 g
+
+
 ```
 
