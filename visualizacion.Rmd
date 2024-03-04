@@ -20,6 +20,16 @@ library(scales)
 owid_covid_data <- read_csv("owid-covid-data.csv")
 #Primero seleccionamos los paises que vamos a utilizar en la tabla, este será nuestro nuevo data frame con el que vamos a crear la gráfica:
 paises_selecionados<-c("United States","Italy","France","Germany","Canada","Japan","United Kingdom","Spain")
+#para acortar la funcion, crearemos un vector asignando a su pais cada color
+pais_color <- c("Spain"="red",
+                "United States" = "blue",
+                "Italy" = "pink",
+                "France" = "green",
+                "Germany" = "purple",
+                "Canada" = "orange",
+                "Japan" = "black",
+                "United Kingdom" = "cyan")
+#asignaremos a una variable los elementos del data de la columna "location" los cuales coinciden con nuestro vector "paises_seleccionados
 paises<-owid_covid_data[owid_covid_data$location %in% paises_selecionados, ]
 #Después en la variable de casos totales sustituimos todos los NA que aparecen por 0
 paises$new_cases_smoothed[is.na(paises$new_cases_smoothed)]<-0
@@ -30,7 +40,7 @@ g<- g + scale_x_date(breaks="%b %d,%Y", date_breaks="1 year")
 #Ponemos los número que queremos en el eje y
 g<- g + scale_y_continuous(breaks=c(seq(0,18,by=2)))
 #Ponemos manualemnte los colores para poder reprsentar a España de rojo
-g<- g + scale_color_manual(values=c("Spain"="red","United States" = "blue","Italy" = "pink","France" = "green","Germany" = "purple","Canada" = "orange","Japan" = "black","United Kingdom" = "cyan"))
+g<- g + scale_color_manual(values= pais_color)
 #Ponemos blanco el fondo de la gráfica
 g<- g + theme_classic()
 #Añadimos todos lo títulos e indicaciones a la gráfica
