@@ -40,7 +40,9 @@ paises<-owid_covid_data[owid_covid_data$location %in% paises_selecionados, ]
 paises$new_cases_smoothed[is.na(paises$new_cases_smoothed)]<-0
 
 #Ahora representamos la gráfica:
-g<- ggplot(paises,aes(x=date,y=new_cases_smoothed))+geom_line(aes(colour=location),size=ifelse(paises$location == "Spain",1.5,0.5)) #Aquí hemos ensachado la línea de España
+g<- ggplot(paises,aes(x=date,y=new_cases_smoothed))+
+  geom_line(aes(colour=location),size=ifelse(paises$location == "Spain",1.5,0.5)) 
+  #Aquí hemos ensachado la línea de España
 
 #Ponemos como queremos que sean las fehcas en el eje x
 g<- g + scale_x_date(breaks = date_breaks("1 year"),labels = scales::date_format("%b %d, %Y")) 
@@ -56,8 +58,11 @@ g<- g + scale_color_manual(values= pais_color)
 g<- g + theme_classic()
 
 #Añadimos todos lo títulos e indicaciones a la gráfica
-g<- g + labs(title="Grupo-G",subtitle="7-day rolling average. For some countries the number of confirmed deaths is much lower than the true number of deaths. This is because of limited
-testing and challenges in the attribution of the cause of death." ,x=NULL,y=NULL,caption="Source: Johns Hopkins University CSSE COVID-19 Data")
+
+subtitulo <- "7-day rolling average. For some countries the number of confirmed deaths is much lower than the true number of deaths. This is because of limited
+testing and challenges in the attribution of the cause of death."
+
+g<- g + labs(title="Grupo-G",subtitle= subtitulo ,x=NULL,y=NULL,caption="Source: Johns Hopkins University CSSE COVID-19 Data")
 
 #mostramos la grafica que hemos estado creando
 show(g)
