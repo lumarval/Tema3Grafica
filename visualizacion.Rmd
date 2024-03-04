@@ -70,5 +70,6 @@ show(g)
 #Creamos un gráfico interactivo con la librería plotly.
 g_interactivo<-ggplotly(g)
 g_interactivo
+
 ```
 
