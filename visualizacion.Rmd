@@ -18,31 +18,27 @@ library(plotly)
 library(scales)
 #A continuación cargamos el fichero de datos
 owid_covid_data <- read_csv("owid-covid-data.csv")
-#Primero seleccionamos los paises que vamos a utilizar en la tabla, este será nuestro nuevo data frame con el que vamos a crear la gráfica
+#Primero seleccionamos los paises que vamos a utilizar en la tabla, este será nuestro nuevo data frame con el que vamos a crear la gráfica:
 paises_selecionados<-c("United States","Italy","France","Germany","Canada","Japan","United Kingdom","Spain")
-#A continuacion, vamos a asignarle un color a cada pais y de esta forma podremos definir que los datos de "Spain" se muestre de coloor rojo
-color_paises <-  c("United States" = "purple",
-                                  "Italy" = "lightblue",
-                                  "France" = "orange",
-                                  "Germany" = "green",
-                                  "Canada" = "brown",
-                                  "Japan" = "darkblue",
-                                  "United Kingdom" = "pink",
-                                  "Spain" = "red")
-#asignaremos en una variable los datos de la columna "location" que pertencen a "owid_covid_data los cuales coinciden con los paises que nos interesen y que hemos guardado antes en la variable "paises_seleccionados"
 paises<-owid_covid_data[owid_covid_data$location %in% paises_selecionados, ]
-# en este caso , podemos observar como tenemos datos faltantes los cuales los vamos a reemplazar por 0
-paises$total_cases[is.na(paises$total_cases)]<-0
-#comenzaremos con la grafica
-g<- ggplot(paises,aes(x=date,y=total_cases))+
-  geom_line(aes(colour=location, size = ifelse(location == "Spain",1 ,0)))+
-  theme(panel.grid.major.y = element_line(color = "grey",size = 0.5,linetype = 2))
-g<- g + scale_x_date(breaks="%b %d,%Y", date_breaks="1 year")
-g<- g + scale_y_continuous(breaks=seq(0,18,by=2)) 
-g <- g + scale_colour_manual(values = color_paises)
-g <- g + theme(legend.position = "none")
+#Después en la variable de casos totales sustituimos todos los NA que aparecen por 0
+paises$new_cases_smoothed[is.na(paises$new_cases_smoothed)]<-0
+#Ahora representamos la gráfica:
+g<- ggplot(paises,aes(x=date,y=new_cases_smoothed))+geom_line(aes(colour=location),size=ifelse(paises$location == "Spain",2,0.5)) #Aquí hemos ensachado la línea de España
+#Ponemos como queremos que sean las fehcas en el eje x
+g<- g + scale_x_date(breaks="%b %d,%Y", date_breaks="1 year") 
+#Ponemos los número que queremos en el eje y
+g<- g + scale_y_continuous(breaks=c(seq(0,18,by=2)))
+#Ponemos manualemnte los colores para poder reprsentar a España de rojo
+g<- g + scale_color_manual(values=c("Spain"="red","United States" = "blue","Italy" = "pink","France" = "green","Germany" = "purple","Canada" = "orange","Japan" = "black","United Kingdom" = "cyan"))
+#Ponemos blanco el fondo de la gráfica
+g<- g + theme_classic()
+#Añadimos todos lo títulos e indicaciones a la gráfica
+g<- g + labs(title="Grupo-G",subtitle="7-day rolling average. For some countries the number of confirmed deaths is much lower than the true number of deaths. This is because of limited
+testing and challenges in the attribution of the cause of death." ,x=NULL,y=NULL,caption="Source: Johns Hopkins University CSSE COVID-19 Data")
 g
-
-
+#Creamos un gráfico interactivo con la librería plotly.
+g_interactivo<-ggplotly(g)
+g_interactivo
 ```
 
