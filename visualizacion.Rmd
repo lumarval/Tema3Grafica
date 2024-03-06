@@ -88,13 +88,29 @@ testing and challenges in the attribution of the cause of death."
 
 #tambien aqui quitamos los titulos de los ejes x e y
 g<- g + labs(title="Grupo-G",subtitle= subtitulo ,x=NULL,y=NULL,caption="Source: Johns Hopkins University CSSE COVID-19 Data")
+g
+```
 
+
+```{r}
 #podemos hacer que los nombres de las variables esten un poco inclinados
 g <- g + theme(axis.text.x=element_text(angle=45, hjust=1))
 
+#ahora haremos que el eje x sea de otro color en este caso gris continua y finita
 g <- g + theme(axis.line.x = element_line(color = "grey",
                                    linewidth = 0.3,
                                    linetype = 1))
+#y aqui eliminamos la linea del eje y
+g <- g +  theme(axis.line.y = element_blank())
+g
+```
+
+
+```{r}
+#vamos a decorar un poco la leyenda
+g <- g + theme(legend.background = element_rect(fill = "white", # Fondo
+                                         colour = 1))        # Borde 
+
 #mostramos la grafica que hemos estado creando
 show(g)
 
