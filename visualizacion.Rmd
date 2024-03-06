@@ -44,9 +44,8 @@ paises<-owid_covid_data[owid_covid_data$location %in% paises_selecionados, ]
 ```{r}
 #Ahora representamos la gráfica:
 g<- ggplot(paises,aes(x=date,y=new_deaths_smoothed_per_million, group=location))+
-  geom_line(aes(colour=location),size=ifelse(paises$location == "Spain",1.5,0.5))
+  geom_line(aes(colour=location),size=ifelse(paises$location == "Spain",1.5,0.5))#Aquí hemos ensachado la línea de España
 g
-#Aquí hemos ensachado la línea de España
 ```
 
 
@@ -87,17 +86,21 @@ g
 subtitulo <- "7-day rolling average. For some countries the number of confirmed deaths is much lower than the true number of deaths. This is because of limited
 testing and challenges in the attribution of the cause of death."
 
+#tambien aqui quitamos los titulos de los ejes x e y
 g<- g + labs(title="Grupo-G",subtitle= subtitulo ,x=NULL,y=NULL,caption="Source: Johns Hopkins University CSSE COVID-19 Data")
 
 #podemos hacer que los nombres de las variables esten un poco inclinados
 g <- g + theme(axis.text.x=element_text(angle=45, hjust=1))
 
+g <- g + theme(axis.line.x = element_line(color = "grey",
+                                   linewidth = 0.3,
+                                   linetype = 1))
 #mostramos la grafica que hemos estado creando
 show(g)
 
 #Creamos un gráfico interactivo con la librería plotly.
-#g_interactivo<-ggplotly(g)
-#g_interactivo
+g_interactivo<-ggplotly(g)
+g_interactivo
 
 ```
 
