@@ -110,7 +110,6 @@ g
 #vamos a decorar un poco la leyenda
 g <- g + theme(legend.background = element_rect(fill = "white", # Fondo
                                          colour = 1))        # Borde 
-
 #mostramos la grafica que hemos estado creando
 show(g)
 
